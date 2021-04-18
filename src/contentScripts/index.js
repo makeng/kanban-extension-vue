@@ -1,19 +1,23 @@
 import './index.styl'
-import getData from '../popup/js/get-data'
+import getData from './get-data'
 
-let contentDataList = []
+
+const SEND_TIME_GAP = 800
+
 // 持续尝试获取页面数据
 const constantlyGetContentDataList = () => {
   // 页面数据
   const timer = setInterval(() => {
-    contentDataList = getData()
-    console.log('获取页面数据...', contentDataList)
-  }, 500)
+    const contentDataList = getData()
+
+    // 发送数据
+    console.log('发送数据到插件...')
+    chrome.runtime.sendMessage({
+      key:'kingdee',
+      data: contentDataList
+    })
+  }, SEND_TIME_GAP)
 }
 
 console.log('Content script start...')
 constantlyGetContentDataList()
-
-export {
-  contentDataList
-}

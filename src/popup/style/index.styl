@@ -1,70 +1,73 @@
 :root
-  --colorTheme: #bbb
-  --colorPrimary: #aaa
-  --colorBg: #ccc
-  --colorActive: #eee
-  --colorText: #444
-  --fontSizeL: 14px
-  --fontSizeM: 12px
-  --fontSizeS: 10px
-  --paddingL: 10px
-  --paddingM: 6px
-  --paddingS: 4px
-  --border-radius: 4px;
-  padding: 0
+  --colorTheme #bbb
+  --colorPrimary #aaa
+  --colorBg #ccc
+  --colorActive #eee
+  --colorText #444
+  --fontSizeL 14px
+  --fontSizeM 12px
+  --fontSizeS 10px
+  --paddingL 10px
+  --paddingM 6px
+  --paddingS 4px
+  --border-radius 4px;
+  padding 0
 
 
 div, h1, h2
-  margin: 0
-  padding: 0
-  font-size: var(--fontSizeM)
-  color: var(--colorText)
-  line-height: 1.2
+  margin 0
+  padding 0
+  font-size var(--fontSizeM)
+  color var(--colorText)
+  line-height 1.2
 
 
 .box
-  width: 1000px
-  display: flex
-  border-radius: var(--border-radius)
+  width 1000px
+  display flex
+  border-radius var(--border-radius)
 
 
 .box__col
-  flex: 1
-  border-right: 1px dashed var(--colorTheme)
-  padding: var(--paddingS) var(--paddingM)
+  flex 1
+  border-right 1px dashed var(--colorTheme)
+  padding var(--paddingS) var(--paddingM)
 
   &:nth-last-child(1)
-    border: 0
+    border 0
 
   &.active
-    background-color: var(--colorActive)
+    background-color var(--colorActive)
 
   h1
-    margin-bottom: 10px
-    padding: var(--paddingM)
-    height: 40px
-    display: flex
+    margin-bottom 10px
+    padding var(--paddingM)
+    height 40px
+    display flex
     justify-content center
     align-items center
-    font-size: var(--fontSizeM)
-    border-radius: var(--border-radius)
-    background-color: var(--colorPrimary)
-    text-align: center
-    color: #fff
-    font-weight: bold
+    font-size var(--fontSizeM)
+    border-radius var(--border-radius)
+    background-color var(--colorPrimary)
+    text-align center
+    color #fff
+    font-weight bold
 
 
 .box__card
-  margin: 10px 0
-  font-size: var(--fontSizeM)
-  background-color: var(--colorBg)
-  border-radius: var(--border-radius)
-  overflow: hidden
+  margin 10px 0
+  font-size var(--fontSizeM)
+  background-color var(--colorBg)
+  border-radius var(--border-radius)
+  overflow hidden
 
   h2
-    border-bottom: 1px dashed var(--colorTheme)
-    padding: var(--paddingS)
-    background-color: var(--colorTheme)
+    border-bottom 1px dashed var(--colorTheme)
+    padding var(--paddingS)
+    background-color var(--colorTheme)
 
   &-content
-    padding: var(--paddingS)
+    padding var(--paddingS)
+
+.msg
+  text-align right

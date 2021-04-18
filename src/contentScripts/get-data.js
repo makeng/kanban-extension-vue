@@ -64,9 +64,9 @@ function getData () {
   objList.sort(compare('current'))
     .sort(compare('period'))
   // 打印
-  objList.forEach(item => {
+/*  objList.forEach(item => {
     console.log(describeObj(item))
-  })
+  })*/
 
   return objList
 }
