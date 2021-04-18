@@ -1,8 +1,8 @@
 :root
   --colorTheme #bbb
   --colorPrimary #aaa
-  --colorBg #ccc
-  --colorActive #eee
+  --colorBg #eee
+  --colorActive #eff
   --colorText #444
   --fontSizeL 14px
   --fontSizeM 12px
@@ -10,8 +10,9 @@
   --paddingL 10px
   --paddingM 6px
   --paddingS 4px
-  --border-radius 4px;
+  --border-radius 4px
   padding 0
+  position relative
 
 
 div, h1, h2
@@ -23,6 +24,7 @@ div, h1, h2
 
 
 .box
+  margin 0 auto
   width 1000px
   display flex
   border-radius var(--border-radius)
@@ -32,26 +34,25 @@ div, h1, h2
   flex 1
   border-right 1px dashed var(--colorTheme)
   padding var(--paddingS) var(--paddingM)
-
   &:nth-last-child(1)
     border 0
 
-  &.active
-    background-color var(--colorActive)
+&.active
+  background-color var(--colorActive)
 
-  h1
-    margin-bottom 10px
-    padding var(--paddingM)
-    height 40px
-    display flex
-    justify-content center
-    align-items center
-    font-size var(--fontSizeM)
-    border-radius var(--border-radius)
-    background-color var(--colorPrimary)
-    text-align center
-    color #fff
-    font-weight bold
+h1
+  margin-bottom 10px
+  padding var(--paddingM)
+  height 40px
+  display flex
+  justify-content center
+  align-items center
+  font-size var(--fontSizeM)
+  border-radius var(--border-radius)
+  background-color var(--colorPrimary)
+  text-align center
+  color #fff
+  font-weight bold
 
 
 .box__card
@@ -71,3 +72,13 @@ div, h1, h2
 
 .msg
   text-align right
+  padding 0 10px
+
+.btn
+  position absolute
+  left 0
+  top 0
+  font-size var(--fontSizeL)
+  padding 2px 4px
+  border 1px dashed var(--colorTheme)
+

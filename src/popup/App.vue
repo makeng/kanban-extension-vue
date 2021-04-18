@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="btn" @click="createExtendPopup">⬅</div>
     <div class="box">
       <div
           class="box__col"
@@ -26,9 +27,9 @@ import './style/index.styl'
 // import {contentDataList} from "../utils/mock"; // mock data
 const originAllList = Object.freeze([
   { title: '详细需求&amp;评审完成', list: [] },
-  { title: '原型设计&amp;评审完成', list: [], active: true },
+  { title: '原型设计&amp;评审完成', list: [] },
   { title: '后端开发&amp;自测完成', list: [], active: true },
-  { title: '前端联调&amp;自测完成', list: [], },
+  { title: '前端联调&amp;自测完成', list: [], active: true },
   { title: '需求验证中', list: [] },
   { title: '测试中', list: [] },
   { title: 'feature1测试完成', list: [] },
@@ -81,6 +82,16 @@ export default {
         }
       })
     },
+    // 保持弹出状态
+    createExtendPopup () {
+      chrome.windows.create({
+        url: 'popup.html',
+        type: 'panel',
+        width: 800,
+        height: 500
+      })
+      window.close() // close the Chrome extension pop-up
+    }
   }
 }
 </script>
