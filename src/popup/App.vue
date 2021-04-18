@@ -49,6 +49,7 @@ export default {
   methods: {
     // 监听背景窗口
     addBgListener () {
+      const lastInnerListLengthArr = []
       // 获取周期列表
       const classifyAllList = (originList) => {
         const allList = JSON.parse(JSON.stringify(originAllList))
@@ -63,13 +64,11 @@ export default {
         })
         return allList
       }
-      const checkInnerListLengthChange = (dataListLength, oldAllList) => {
-        let totalLength = 0
-
-        oldAllList.forEach(item => {
-          totalLength += item.list.length
+      // 检查数据长度是否变化
+      const checkInnerListLengthChange = (newList, oldList) => {
+        return !newList.every((item, index) => {
+          return item.list.length === oldList[index].list.length
         })
-        return dataListLength !== totalLength
       }
 
       console.log('lister to background')
@@ -77,8 +76,9 @@ export default {
         const { allList } = this
         const { key, data } = message
 
-        if (key === 'kingdee' && checkInnerListLengthChange(data.length, allList)) {
-          this.allList = classifyAllList(data)
+        const newAllList = classifyAllList(data)
+        if (key === 'kingdee' && checkInnerListLengthChange(newAllList, allList)) {
+          this.allList = newAllList
         }
       })
     },
