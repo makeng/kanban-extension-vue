@@ -48,28 +48,39 @@ export default {
   methods: {
     // 监听背景窗口
     addBgListener () {
-      console.log('lister messager')
+      // 获取周期列表
+      const classifyAllList = (originList) => {
+        const allList = JSON.parse(JSON.stringify(originAllList))
+
+        allList.forEach(item => {
+          const { title, list } = item
+          originList.forEach(sub => {
+            if (sub.current === title) {
+              list.push(sub)
+            }
+          })
+        })
+        return allList
+      }
+      const checkInnerListLengthChange = (dataListLength, oldAllList) => {
+        let totalLength = 0
+
+        oldAllList.forEach(item => {
+          totalLength += item.list.length
+        })
+        return dataListLength !== totalLength
+      }
+
+      console.log('lister to background')
       chrome.runtime.onMessage.addListener((message) => {
+        const { allList } = this
         const { key, data } = message
-        if (key === 'kingdee' && data) {
-          this.allList = this.classifyAllList(data)
+
+        if (key === 'kingdee' && checkInnerListLengthChange(data.length, allList)) {
+          this.allList = classifyAllList(data)
         }
       })
     },
-    // 获取周期列表
-    classifyAllList (originList) {
-      const allList = JSON.parse(JSON.stringify(originAllList))
-
-      allList.forEach(item => {
-        const { title, list } = item
-        originList.forEach(sub => {
-          if (sub.current === title) {
-            list.push(sub)
-          }
-        })
-      })
-      return allList
-    }
   }
 }
 </script>

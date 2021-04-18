@@ -1,23 +1,37 @@
 import './index.styl'
 import getData from './get-data'
 
+function getDataAndSend () {
+  const contentDataList = getData()
 
-const SEND_TIME_GAP = 800
+  // 发送数据
+  console.log('发送数据到插件...')
+  chrome.runtime.sendMessage({
+    key: 'kingdee',
+    data: contentDataList
+  })
+}
 
 // 持续尝试获取页面数据
-const constantlyGetContentDataList = () => {
-  // 页面数据
-  const timer = setInterval(() => {
-    const contentDataList = getData()
+function listenToDomGetData (cb) {
+  const OPTION = {
+    childList: true,
+    subtree: true
+  }
 
-    // 发送数据
-    console.log('发送数据到插件...')
-    chrome.runtime.sendMessage({
-      key:'kingdee',
-      data: contentDataList
-    })
-  }, SEND_TIME_GAP)
+  const ob = new MutationObserver(mutationList => {
+    cb && cb()
+  })
+  const body = document.getElementsByTagName('body')[0]
+  ob.observe(body, OPTION)
 }
 
 console.log('Content script start...')
-constantlyGetContentDataList()
+getDataAndSend()
+listenToDomGetData(() => {
+  getDataAndSend()
+})
+// update by time
+setInterval(() => {
+  getDataAndSend()
+}, 2000)
