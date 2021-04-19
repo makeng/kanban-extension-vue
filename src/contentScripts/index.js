@@ -5,7 +5,6 @@ function getDataAndSend () {
   const contentDataList = getData()
 
   // 发送数据
-  console.log('发送数据到插件...')
   chrome.runtime.sendMessage({
     key: 'kingdee',
     data: contentDataList
@@ -27,10 +26,10 @@ function listenToDomGetData (cb) {
 }
 
 console.log('Content script start...')
-getDataAndSend()
-listenToDomGetData(() => {
+// update when dom change
+/*listenToDomGetData(() => {
   getDataAndSend()
-})
+})*/
 // update by time
 setInterval(() => {
   getDataAndSend()

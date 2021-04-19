@@ -7,7 +7,7 @@
           v-for="item in allList"
           :class="item.active && 'active'"
       >
-        <h1> {{ item.title }}</h1>
+        <h1> {{ item.title | replaceEscape }}</h1>
         <div
             class="box__card"
             v-for="sub in item.list"
@@ -46,13 +46,17 @@ export default {
       allList: JSON.parse(JSON.stringify(originAllList))
     }
   },
+  filters: {
+    replaceEscape (val) {
+      return replaceEscapeStr(val)
+    }
+  },
   mounted () {
     this.addBgListener()
   },
   methods: {
     // 监听背景窗口
     addBgListener () {
-      const lastInnerListLengthArr = []
       // list 格式化成列
       const classifyAllList = (originList) => {
         const allList = JSON.parse(JSON.stringify(originAllList))
@@ -64,16 +68,8 @@ export default {
               list.push(sub)
             }
           })
-          console.log(title)
-          item.title = replaceEscapeStr(title)
         })
         return allList
-      }
-      // 检查数据长度是否变化
-      const checkInnerListLengthChange = (newList, oldList) => {
-        return !newList.every((item, index) => {
-          return item.list.length === oldList[index].list.length
-        })
       }
 
       console.log('lister to background')
@@ -81,8 +77,10 @@ export default {
         const { allList } = this
         const { key, data } = message
 
+        console.log(data)
         const newAllList = classifyAllList(data)
-        if (key === 'kingdee' && checkInnerListLengthChange(newAllList, allList)) {
+        console.log(newAllList)
+        if (key === 'kingdee') {
           this.allList = newAllList
         }
       })

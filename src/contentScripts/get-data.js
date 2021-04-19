@@ -1,5 +1,22 @@
 // 执行
 function getData () {
+  // 各种类名
+  const CLASSNAME = {
+    HEAD: 'ag-header',
+    HEAD_INNER: 'ag-header-cell-text',
+    CONTAINER: 'ag-center-cols-container',
+    ROW: 'ag-row',
+    ROW_TEXT: '_19IrTnxB',
+    ROW_LINK: '_3mxww4IO'
+  }
+  // 表头和对应的字段名称
+  const TITLE_LIST = [
+    { title: '用户故事编码', propName: 'code' },
+    { title: '用户故事名称', propName: 'desc' },
+    { title: '迭代阶段', propName: 'period' },
+    { title: '状态', propName: 'current' },
+  ]
+
   //排序函数，配合 Array.prototype.sort 使用
   const compare = property =>
     (obj1, obj2) => (obj1[property] > obj2[property] ? 1 : -1) // 升序
@@ -8,14 +25,46 @@ function getData () {
     return ele.getElementsByClassName(className)
   }
 
+  // 获取标题列表
+  function getTitleList () {
+    let res = []
+    const getInnerText = el => el.children[0].innerHTML
+    // 特殊处理。表格数据会突然变化
+    const specialHandle = res => {
+      console.log(res[0])
+      // 扔掉 '#'
+      if (res[0] === '#') {
+        res.shift()
+      }
+      // UI 上与格子反过来
+      if (res[0] !== '用户故事编码') {
+        res.reverse()
+      }
+
+      console.log(res)
+      return res
+    }
+
+    const tableHead = getSubClassEleList(document, CLASSNAME.HEAD)[0]
+    const headList = getSubClassEleList(tableHead, CLASSNAME.HEAD_INNER)
+    for (let i = 0; i < headList.length; i++) {
+      const item = headList[i]
+      const text = getInnerText(item)
+      res.push(text)
+    }
+
+    return specialHandle(res)
+  }
+
+  // 获取内容数据列表
   function getContent () {
-    const tableBody = getSubClassEleList(document, 'ag-center-cols-container')[0]
+    const tableBody = getSubClassEleList(document, CLASSNAME.CONTAINER)[0]
     if (!tableBody) {
       return false
     }
 
-    const rowList = getSubClassEleList(tableBody, 'ag-row')
-    const allStrList = []
+    const rowList = getSubClassEleList(tableBody, CLASSNAME.ROW)
+    const bodyList = []
 
     for (let i = 0; i < rowList.length; i++) {
       const strList = []
@@ -25,50 +74,69 @@ function getData () {
         const cellList = row.children
         for (let j = 0; j < cellList.length; j++) {
           const cell = cellList[j]
-          const textBox = getSubClassEleList(cell, '_19IrTnxB')[0]
-          const stateBox = getSubClassEleList(cell, '_3mxww4IO')[0]
+          const textBox = getSubClassEleList(cell, CLASSNAME.ROW_TEXT)[0]
+          const linkBox = getSubClassEleList(cell, CLASSNAME.ROW_LINK)[0]
 
           const text = textBox && textBox.innerHTML // 字段
-          const state = stateBox && stateBox.innerHTML // 状态
-
-          strList.push(state ? state : text)
+          const link = linkBox && linkBox.innerHTML // 链接
+          strList.push(link ? link : text)
         }
       }
 
-      allStrList.push(strList)
+      bodyList.push(strList)
     }
-
-    return allStrList
+    return bodyList
   }
 
-  function listToObj (list) {
-    return {
-      code: list[0],
-      desc: list[1],
-      period: list[2],
-      current: list[4]
+  // 列表数据转对象
+  function listToObj (list, headProp) {
+    const res = {}
+
+    for (const key in headProp) {
+      const index = headProp[key]
+      res[key] = list[index]
     }
+    return res
   }
 
-  function describeObj (obj) {
-    return `${obj.code} ${obj.period} ${obj.current} ${obj.desc}`
+  // 标题列表转对象
+  function headListToPropObj (list) {
+    const res = {}
+    // 列表项标记上相应的 index
+    const markPropName = list => {
+      const titleList = [...TITLE_LIST]
+      list.forEach((str, index) => {
+        const foundIndex = titleList.findIndex(item => item.title === str)
+        if (foundIndex >= 0) {
+          titleList[foundIndex].index = index
+        }
+      })
+      return titleList
+    }
+    // 简化对象
+    const setPropToRes = (obj) => {
+      const { propName, index } = obj
+      res[propName] = index
+    }
+
+    list = markPropName(list)
+    list.forEach(item => setPropToRes(item))
+    return res
   }
 
   // 执行
-  const allStrList = getContent()
-  if (!allStrList || !allStrList.length) {
+  const bodyList = getContent()
+  if (!bodyList || !bodyList.length) {
     return []
   }
-  const objList = allStrList.map(list => listToObj(list))
+  const headList = getTitleList()
+  const headProp = headListToPropObj(headList)
+  const contentList = bodyList.map(list => listToObj(list, headProp))
   // 排序
-  objList.sort(compare('current'))
+  contentList.sort(compare('current'))
     .sort(compare('period'))
-  // 打印
-/*  objList.forEach(item => {
-    console.log(describeObj(item))
-  })*/
 
-  return objList
+  return contentList
 }
 
 export default getData
