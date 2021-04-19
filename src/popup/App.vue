@@ -25,7 +25,10 @@
 <script>
 import './style/index.styl'
 // import {contentDataList} from "../utils/mock"; // mock data
-const originAllList = Object.freeze([
+import { replaceEscapeStr } from '../utils/string'
+
+const originAllList = [
+  { title: '计划', list: [] },
   { title: '详细需求&amp;评审完成', list: [] },
   { title: '原型设计&amp;评审完成', list: [] },
   { title: '后端开发&amp;自测完成', list: [], active: true },
@@ -34,7 +37,7 @@ const originAllList = Object.freeze([
   { title: '测试中', list: [] },
   { title: 'feature1测试完成', list: [] },
   { title: '灰度发布完成', list: [] },
-])
+]
 
 export default {
   data () {
@@ -50,7 +53,7 @@ export default {
     // 监听背景窗口
     addBgListener () {
       const lastInnerListLengthArr = []
-      // 获取周期列表
+      // list 格式化成列
       const classifyAllList = (originList) => {
         const allList = JSON.parse(JSON.stringify(originAllList))
 
@@ -61,6 +64,8 @@ export default {
               list.push(sub)
             }
           })
+          console.log(title)
+          item.title = replaceEscapeStr(title)
         })
         return allList
       }
