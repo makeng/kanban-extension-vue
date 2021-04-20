@@ -33,4 +33,4 @@ console.log('Content script start...')
 // update by time
 setInterval(() => {
   getDataAndSend()
-}, 2000)
+}, 1500)

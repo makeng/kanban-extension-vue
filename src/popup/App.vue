@@ -74,14 +74,11 @@ export default {
 
       console.log('lister to background')
       chrome.runtime.onMessage.addListener((message) => {
-        const { allList } = this
         const { key, data } = message
 
-        console.log(data)
-        const newAllList = classifyAllList(data)
-        console.log(newAllList)
         if (key === 'kingdee') {
-          this.allList = newAllList
+          console.log(data)
+          this.allList = classifyAllList(data)
         }
       })
     },
@@ -90,7 +87,7 @@ export default {
       chrome.windows.create({
         url: 'popup.html',
         type: 'panel',
-        width: 800,
+        width: 1000,
         height: 500
       })
       window.close() // close the Chrome extension pop-up
