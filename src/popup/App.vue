@@ -76,8 +76,7 @@ export default {
       chrome.runtime.onMessage.addListener((message) => {
         const { key, data } = message
 
-        if (key === 'kingdee') {
-          console.log(data)
+        if (key === 'kingdee' && data && data.length) {
           this.allList = classifyAllList(data)
         }
       })
